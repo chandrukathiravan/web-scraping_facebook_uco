@@ -11,16 +11,51 @@ from urllib.parse import (
     parse_qs
 )
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import calendar
 
-START_DATE = datetime.strptime(
-    "01-June-2026",
-    "%d-%B-%Y"
+# =========================================
+# CURRENT DATE
+# =========================================
+
+today = datetime.today()
+
+print(
+    f"\nCURRENT DATE : {today.strftime('%d-%b-%Y')}"
 )
 
-END_DATE = datetime.strptime(
-    "03-June-2026",
-    "%d-%B-%Y"
+# =========================================
+# PREVIOUS MONTH DATE RANGE
+# =========================================
+
+prev_month = today - relativedelta(months=1)
+
+START_DATE = datetime(
+    prev_month.year,
+    prev_month.month,
+    1
 )
+
+last_day = calendar.monthrange(
+    prev_month.year,
+    prev_month.month
+)[1]
+
+END_DATE = datetime(
+    prev_month.year,
+    prev_month.month,
+    last_day
+)
+
+print(
+    f"START DATE   : {START_DATE.strftime('%d-%b-%Y')}"
+)
+
+print(
+    f"END DATE     : {END_DATE.strftime('%d-%b-%Y')}"
+)
+
+MONTH_NAME = prev_month.strftime("%B").lower()
 
 STOP_COLLECTION = False
 # =========================================
@@ -33,11 +68,11 @@ TARGET_URL = (
 )
 
 OUTPUT_EXCEL = (
-    "output/facebook_photo_urls_1.xlsx"
+    f"output/facebook_photo_urls_{MONTH_NAME}.xlsx"
 )
 
 OUTPUT_CSV = (
-    "output/facebook_photo_urls_1.csv"
+    f"output/facebook_photo_urls_{MONTH_NAME}.csv"
 )
 
 os.makedirs(
@@ -292,7 +327,7 @@ with sync_playwright() as p:
 
     scroll_count = 0
 
-    MAX_SCROLLS = 5
+    MAX_SCROLLS = 100
 
     duplicate_counter = 0
 
