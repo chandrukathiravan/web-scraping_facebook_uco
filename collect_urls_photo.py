@@ -11,16 +11,51 @@ from urllib.parse import (
     parse_qs
 )
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import calendar
 
-START_DATE = datetime.strptime(
-    "01-January-2026",
-    "%d-%B-%Y"
+# =========================================
+# CURRENT DATE
+# =========================================
+
+today = datetime.today()
+
+print(
+    f"\nCURRENT DATE : {today.strftime('%d-%b-%Y')}"
 )
 
-END_DATE = datetime.strptime(
-    "30-April-2026",
-    "%d-%B-%Y"
+# =========================================
+# PREVIOUS MONTH DATE RANGE
+# =========================================
+
+prev_month = today - relativedelta(months=1)
+
+START_DATE = datetime(
+    prev_month.year,
+    prev_month.month,
+    1
 )
+
+last_day = calendar.monthrange(
+    prev_month.year,
+    prev_month.month
+)[1]
+
+END_DATE = datetime(
+    prev_month.year,
+    prev_month.month,
+    last_day
+)
+
+print(
+    f"START DATE   : {START_DATE.strftime('%d-%b-%Y')}"
+)
+
+print(
+    f"END DATE     : {END_DATE.strftime('%d-%b-%Y')}"
+)
+
+MONTH_NAME = prev_month.strftime("%B").lower()
 
 STOP_COLLECTION = False
 # =========================================
@@ -32,17 +67,18 @@ TARGET_URL = (
     "official.ucobank/photos"
 )
 
+MONTH_YEAR = prev_month.strftime("%b_%Y")
+
+URL_FOLDER = f"URL/{MONTH_YEAR}"
+
+os.makedirs(URL_FOLDER, exist_ok=True)
+
 OUTPUT_EXCEL = (
-    "output/facebook_photo_urls_june.xlsx"
+    f"{URL_FOLDER}/facebook_photo_urls_{MONTH_YEAR}.xlsx"
 )
 
 OUTPUT_CSV = (
-    "output/facebook_photo_urls_june.csv"
-)
-
-os.makedirs(
-    "output",
-    exist_ok=True
+    f"{URL_FOLDER}/facebook_photo_urls_{MONTH_YEAR}.csv"
 )
 
 all_posts = []

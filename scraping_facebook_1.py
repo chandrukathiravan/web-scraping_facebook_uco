@@ -7,17 +7,31 @@ import time
 import os
 import re
 from bs4 import BeautifulSoup
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-# =========================================
-# INPUT / OUTPUT
-# =========================================
+today = datetime.today()
+prev_month = today - relativedelta(months=1)
 
-INPUT_EXCEL = "URL/facebook_photo_urls_jan.xlsx"
-OUTPUT_EXCEL = "output/facebook_scraped_data_final_jan.xlsx"
-OUTPUT_CSV = "output/facebook_scraped_data_final_jan.csv"
+MONTH_YEAR = prev_month.strftime("%b_%Y")
 
-os.makedirs("output", exist_ok=True)
+URL_FOLDER = f"URL/{MONTH_YEAR}"
+OUTPUT_FOLDER = f"output/{MONTH_YEAR}"
 
+os.makedirs(URL_FOLDER, exist_ok=True)
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+INPUT_EXCEL = (
+    f"{URL_FOLDER}/facebook_photo_urls_{MONTH_YEAR}.xlsx"
+)
+
+OUTPUT_EXCEL = (
+    f"{OUTPUT_FOLDER}/facebook_scraped_data_final_{MONTH_YEAR}.xlsx"
+)
+
+OUTPUT_CSV = (
+    f"{OUTPUT_FOLDER}/facebook_scraped_data_final_{MONTH_YEAR}.csv"
+)
 # =========================================
 # LOAD URLS
 # =========================================
